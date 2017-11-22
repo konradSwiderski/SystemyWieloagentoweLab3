@@ -15,18 +15,20 @@
       <file leaf-file-name="Philosopher.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Philosopher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="269" column="39" lean-forward="true" selection-start-line="269" selection-start-column="39" selection-end-line="269" selection-end-column="39" />
+            <state relative-caret-position="236">
+              <caret line="192" column="0" lean-forward="true" selection-start-line="192" selection-start-column="0" selection-end-line="192" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4101#8777#0" expanded="true" />
-                <element signature="e#5850#8391#0" expanded="true" />
-                <element signature="e#8390#8391#0" expanded="true" />
-                <element signature="e#8776#8777#0" expanded="true" />
-                <element signature="e#9460#14804#0" expanded="true" />
-                <element signature="e#10883#14418#0" expanded="true" />
-                <element signature="e#14417#14418#0" expanded="true" />
-                <element signature="e#14803#14804#0" expanded="true" />
+                <element signature="e#4166#9200#0" expanded="true" />
+                <element signature="e#5915#8456#0" expanded="true" />
+                <element signature="e#8455#8456#0" expanded="true" />
+                <element signature="e#9199#9200#0" expanded="true" />
+                <element signature="e#9883#15227#0" expanded="true" />
+                <element signature="e#11306#14841#0" expanded="true" />
+                <element signature="e#14840#14841#0" expanded="true" />
+                <element signature="e#15226#15227#0" expanded="true" />
+                <element signature="e#15900#16968#0" expanded="true" />
+                <element signature="e#16967#16968#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,8 +51,8 @@
       <file leaf-file-name="KebabCyclicBehaviour.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/KebabCyclicBehaviour.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="28" selection-end-column="52" />
+            <state relative-caret-position="391">
+              <caret line="36" column="17" lean-forward="true" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,8 +97,8 @@
       <file leaf-file-name="Kebab.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Kebab.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="42" column="61" lean-forward="false" selection-start-line="42" selection-start-column="61" selection-end-line="42" selection-end-column="61" />
+            <state relative-caret-position="-36">
+              <caret line="15" column="26" lean-forward="false" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -121,11 +123,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Kebab.java" />
         <option value="$PROJECT_DIR$/src/PhilosopherCyclicBehaviour.java" />
-        <option value="$PROJECT_DIR$/src/KebabCyclicBehaviour.java" />
         <option value="$PROJECT_DIR$/src/Fork.java" />
         <option value="$PROJECT_DIR$/src/ForkCyclicBehaviour.java" />
+        <option value="$PROJECT_DIR$/src/KebabCyclicBehaviour.java" />
+        <option value="$PROJECT_DIR$/src/Kebab.java" />
         <option value="$PROJECT_DIR$/src/Philosopher.java" />
       </list>
     </option>
@@ -350,14 +352,16 @@
           <caret line="114" column="33" lean-forward="true" selection-start-line="114" selection-start-column="33" selection-end-line="114" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4101#8777#0" expanded="true" />
-            <element signature="e#5850#8391#0" expanded="true" />
-            <element signature="e#8390#8391#0" expanded="true" />
-            <element signature="e#8776#8777#0" expanded="true" />
-            <element signature="e#9460#14804#0" expanded="true" />
-            <element signature="e#10883#14418#0" expanded="true" />
-            <element signature="e#14417#14418#0" expanded="true" />
-            <element signature="e#14803#14804#0" expanded="true" />
+            <element signature="e#4166#9200#0" expanded="true" />
+            <element signature="e#5915#8456#0" expanded="true" />
+            <element signature="e#8455#8456#0" expanded="true" />
+            <element signature="e#9199#9200#0" expanded="true" />
+            <element signature="e#9883#15227#0" expanded="true" />
+            <element signature="e#11306#14841#0" expanded="true" />
+            <element signature="e#14840#14841#0" expanded="true" />
+            <element signature="e#15226#15227#0" expanded="true" />
+            <element signature="e#15900#16968#0" expanded="true" />
+            <element signature="e#16967#16968#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -428,14 +432,16 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4101#8777#0" expanded="true" />
-            <element signature="e#5850#8391#0" expanded="true" />
-            <element signature="e#8390#8391#0" expanded="true" />
-            <element signature="e#8776#8777#0" expanded="true" />
-            <element signature="e#9460#14804#0" expanded="true" />
-            <element signature="e#10883#14418#0" expanded="true" />
-            <element signature="e#14417#14418#0" expanded="true" />
-            <element signature="e#14803#14804#0" expanded="true" />
+            <element signature="e#4166#9200#0" expanded="true" />
+            <element signature="e#5915#8456#0" expanded="true" />
+            <element signature="e#8455#8456#0" expanded="true" />
+            <element signature="e#9199#9200#0" expanded="true" />
+            <element signature="e#9883#15227#0" expanded="true" />
+            <element signature="e#11306#14841#0" expanded="true" />
+            <element signature="e#14840#14841#0" expanded="true" />
+            <element signature="e#15226#15227#0" expanded="true" />
+            <element signature="e#15900#16968#0" expanded="true" />
+            <element signature="e#16967#16968#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -500,16 +506,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/KebabCyclicBehaviour.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="28" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Fork.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="406">
@@ -520,20 +516,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Kebab.java">
+    <entry file="file://$PROJECT_DIR$/src/ForkCyclicBehaviour.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="42" column="61" lean-forward="false" selection-start-line="42" selection-start-column="61" selection-end-line="42" selection-end-column="61" />
+        <state relative-caret-position="459">
+          <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ForkCyclicBehaviour.java">
+    <entry file="file://$PROJECT_DIR$/src/KebabCyclicBehaviour.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+        <state relative-caret-position="391">
+          <caret line="36" column="17" lean-forward="true" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Kebab.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-36">
+          <caret line="15" column="26" lean-forward="false" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -554,18 +560,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Philosopher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="269" column="39" lean-forward="true" selection-start-line="269" selection-start-column="39" selection-end-line="269" selection-end-column="39" />
+        <state relative-caret-position="236">
+          <caret line="192" column="0" lean-forward="true" selection-start-line="192" selection-start-column="0" selection-end-line="192" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4101#8777#0" expanded="true" />
-            <element signature="e#5850#8391#0" expanded="true" />
-            <element signature="e#8390#8391#0" expanded="true" />
-            <element signature="e#8776#8777#0" expanded="true" />
-            <element signature="e#9460#14804#0" expanded="true" />
-            <element signature="e#10883#14418#0" expanded="true" />
-            <element signature="e#14417#14418#0" expanded="true" />
-            <element signature="e#14803#14804#0" expanded="true" />
+            <element signature="e#4166#9200#0" expanded="true" />
+            <element signature="e#5915#8456#0" expanded="true" />
+            <element signature="e#8455#8456#0" expanded="true" />
+            <element signature="e#9199#9200#0" expanded="true" />
+            <element signature="e#9883#15227#0" expanded="true" />
+            <element signature="e#11306#14841#0" expanded="true" />
+            <element signature="e#14840#14841#0" expanded="true" />
+            <element signature="e#15226#15227#0" expanded="true" />
+            <element signature="e#15900#16968#0" expanded="true" />
+            <element signature="e#16967#16968#0" expanded="true" />
           </folding>
         </state>
       </provider>

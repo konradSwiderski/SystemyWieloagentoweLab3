@@ -28,6 +28,20 @@ public class KebabCyclicBehaviour extends CyclicBehaviour
                 myAgent.send(reply);
                 System.out.println("KEBAB: I sent");
             }
+            if(msg.getPerformative() == ACLMessage.PROPOSE)
+            {
+                System.out.println("KEBAB: I GIVE KEBAB");
+                ACLMessage reply = msg.createReply();
+                reply.setPerformative(ACLMessage.PROPOSE);
+                if(numberOfKebabs > 0)
+                {
+                    reply.setContent("1");
+                    numberOfKebabs = numberOfKebabs - 1;
+                }
+                else
+                    reply.setContent("0");
+                myAgent.send(reply);
+            }
         }
         else
         {

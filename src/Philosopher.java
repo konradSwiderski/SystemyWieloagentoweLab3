@@ -30,6 +30,7 @@ public class Philosopher extends Agent
     private int num = 0;
     private int answerFromKebab = 0;
     private int state = 0;
+    private int countOfKebabs = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -100,7 +101,7 @@ public class Philosopher extends Agent
         {
             protected void onTick()
             {
-                System.out.println("onTick_________________");
+                System.out.println("______________onTick_________________" + countOfKebabs);
                 if(state == 0) //STATE 0 - I don't have any...
                 {
                     state = 1;
@@ -182,6 +183,11 @@ public class Philosopher extends Agent
                                         });
 
 
+                                    }
+                                    else
+                                    {
+                                        System.out.println("============================My name: " + getLocalName() + " Time: " + randInterval + " I got kebabs: " + countOfKebabs);
+                                        myAgent.doDelete();
                                     }
                                     myAgent.removeBehaviour(this);
 
@@ -298,13 +304,54 @@ public class Philosopher extends Agent
                 }
                 else if(state == 2) //STATE 2 - I have two | I'm getting kebab
                 {
-                    state = 3;
+
                     System.out.println(".....................State 2...............................");
+                    if(!vectorIdOfKebabs.isEmpty())
+                    {
+                        ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
+                        msg.addReceiver(vectorIdOfKebabs.firstElement());
+                        myAgent.send(msg);
+                        System.out.println("PHILOSPHER: I sent msg to Kebab");
+                    }
+                    //wait for answer from Kebab
+                    addBehaviour(new CyclicBehaviour()
+                    {
+                        @Override
+                        public void action()
+                        {
+                            System.out.println("Cyclic**********");
+                            ACLMessage msg = myAgent.receive();
+                            if (msg!= null)
+                            {
+                                if(msg.getPerformative() == ACLMessage.PROPOSE)
+                                {
+                                    int kebab = Integer.parseInt(msg.getContent());
+                                    if(kebab == 1)
+                                        countOfKebabs = countOfKebabs + 1;
+                                    state = 3;
+                                    myAgent.removeBehaviour(this);
+                                }
+                            }
+                            else
+                            {   System.out.println("Brak");
+                                block();
+                            }
+                        }
+                    });
                 }
                 else if(state == 3) //STATE 3 - RESET ALL
                 {
                     state = 0;
                     System.out.println(".....................State 3...............................");
+                    //cancel left fork
+                    ACLMessage msgLeftForkCancel = new ACLMessage(ACLMessage.CANCEL);
+                    msgLeftForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
+                    myAgent.send(msgLeftForkCancel);
+
+                    //cancel right fork
+                    ACLMessage msgRightForkCancel = new ACLMessage(ACLMessage.CANCEL);
+                    msgRightForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
+                    myAgent.send(msgRightForkCancel);
                 }
 
 
