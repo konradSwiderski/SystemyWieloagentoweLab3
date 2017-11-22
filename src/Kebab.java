@@ -42,7 +42,5 @@ public class Kebab extends Agent
         KebabCyclicBehaviour kebabCyclicBehaviour = new KebabCyclicBehaviour();
         kebabCyclicBehaviour.setNumberOfKebabs(numberOfKebabs);
         addBehaviour(kebabCyclicBehaviour);
-
-        System.out.println("Kebab has been started");
     }
 }

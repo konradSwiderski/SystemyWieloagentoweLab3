@@ -37,7 +37,5 @@ public class Fork extends Agent
 
         ForkCyclicBehaviour forkCyclicBehaviour = new ForkCyclicBehaviour();
         addBehaviour(forkCyclicBehaviour);
-
-        System.out.println("FORK has been started " + getLocalName());
     }
 }

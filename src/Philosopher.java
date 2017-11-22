@@ -37,7 +37,6 @@ public class Philosopher extends Agent
     public Philosopher()
     {
         randInterval = ThreadLocalRandom.current().nextInt(500, 1500 + 1);
-        System.out.println("_Time of interval behaviour: " + randInterval);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,7 @@ public class Philosopher extends Agent
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType("agentPhilosopher");
-        sd.setName("Philosopher");
+        sd.setName(getLocalName());
         dfd.addServices(sd);
         try
         {
@@ -95,23 +94,22 @@ public class Philosopher extends Agent
         while (vectorIdOfLeftForks.isEmpty()) { searchAgentLeftFork(); }
         while (vectorIdOfRightForks.isEmpty()) { searchAgentRightFork(); }
 
-        System.out.print("))))))))))))MY LEFT" + vectorIdOfLeftForks.firstElement() + "))))))))))))))MY RIGHT" + vectorIdOfRightForks.firstElement());
 
         Behaviour creatingTokenBehaviour = new TickerBehaviour( this, 5000)
         {
             protected void onTick()
             {
-                System.out.println("______________onTick_________________" + countOfKebabs);
+                System.out.println("______________onTick_________________"+ countOfKebabs + " " + myAgent.getName());
                 if(state == 0) //STATE 0 - I don't have any...
                 {
                     state = 1;
-                    System.out.println(".....................State 0...............................");
+                    System.out.println(".....................State 0 NO FORKS..............................." + myAgent.getName());
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-                        System.out.println("PHILOSPHER: I sent msg to Kebab");
+//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
                     //wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
@@ -119,14 +117,13 @@ public class Philosopher extends Agent
                         @Override
                         public void action()
                         {
-                            System.out.println("Cyclic**********");
                             ACLMessage msg = myAgent.receive();
                             if (msg!= null)
                             {
                                 if(msg.getPerformative() == ACLMessage.REQUEST)
                                 {
                                     numberOfKebabs = Integer.parseInt(msg.getContent());
-                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
+//                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
 
                                     if(numberOfKebabs > 0)
                                     {
@@ -134,14 +131,14 @@ public class Philosopher extends Agent
                                         //which one?
                                         int whichFork = ThreadLocalRandom.current().nextInt(1, 2 + 1);
                                         ACLMessage msgFork = new ACLMessage(ACLMessage.AGREE);
-                                        System.out.println("whichFork" + whichFork);
+//                                        System.out.println("whichFork" + whichFork);
                                         if (whichFork == 1)
                                             msgFork.addReceiver(vectorIdOfLeftForks.firstElement());
                                         else
                                             msgFork.addReceiver(vectorIdOfRightForks.firstElement());
-//
+
                                         myAgent.send(msgFork);
-//                                        System.out.println("PHILOSPHER: I sent msg to Fork");
+
                                         //wait for answer from Fork
                                         addBehaviour(new CyclicBehaviour() {
                                             @Override
@@ -151,7 +148,7 @@ public class Philosopher extends Agent
                                                 if (msgFromFork!= null)
                                                 {
                                                     int contentFork = Integer.parseInt(msgFromFork.getContent());
-                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
+//                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
                                                     if(whichFork == 1)
                                                     {
                                                         if(contentFork == 0)
@@ -167,8 +164,8 @@ public class Philosopher extends Agent
                                                             ihaveRightFork = 0;
                                                     }
 
-                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork);
-                                                    System.out.println("ihaveRightFork " + ihaveRightFork);
+                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork + " " + myAgent.getName());
+                                                    System.out.println("ihaveRightFork " + ihaveRightFork + " " + myAgent.getName());
                                                     //I dont have any....
                                                     if(ihaveLeftFork == 0 && ihaveRightFork == 0)
                                                         state = 0;
@@ -176,7 +173,7 @@ public class Philosopher extends Agent
                                                     myAgent.removeBehaviour(this);
                                                 }
                                                 else
-                                                {   System.out.println("Brak");
+                                                {
                                                     block();
                                                 }
                                             }
@@ -194,7 +191,7 @@ public class Philosopher extends Agent
                                 }
                             }
                             else
-                            {   System.out.println("Brak");
+                            {
                                 block();
                             }
                         }
@@ -203,13 +200,13 @@ public class Philosopher extends Agent
                 else if(state == 1) //STATE 1 - I have one
                 {
                     state = 2;
-                    System.out.println(".....................State 1...............................");
+                    System.out.println(".....................State 1 ONE FORK..............................." + myAgent.getName());
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-                        System.out.println("PHILOSPHER: I sent msg to Kebab");
+//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
                     //wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
@@ -217,14 +214,13 @@ public class Philosopher extends Agent
                         @Override
                         public void action()
                         {
-                            System.out.println("Cyclic**********");
                             ACLMessage msg = myAgent.receive();
                             if (msg!= null)
                             {
                                 if(msg.getPerformative() == ACLMessage.REQUEST)
                                 {
                                     numberOfKebabs = Integer.parseInt(msg.getContent());
-                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
+//                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
 
                                     if(numberOfKebabs > 0)
                                     {
@@ -246,7 +242,7 @@ public class Philosopher extends Agent
                                                 if (msgFromFork!= null)
                                                 {
                                                     int contentFork = Integer.parseInt(msgFromFork.getContent());
-                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
+//                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
                                                     if(ihaveLeftFork == 1)
                                                     {
                                                         if(contentFork == 0)
@@ -262,28 +258,29 @@ public class Philosopher extends Agent
                                                             ihaveLeftFork = 0;
                                                     }
 
-                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork);
-                                                    System.out.println("ihaveRightFork " + ihaveRightFork);
+                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork + " " + myAgent.getName());
+                                                    System.out.println("ihaveRightFork " + ihaveRightFork + " " + myAgent.getName());
                                                     //I have two??
                                                     if(ihaveLeftFork == 1 && ihaveRightFork == 1)
                                                         state = 2;
                                                     else
                                                     {
                                                         state = 0;
-                                                        ihaveLeftFork = 0;
-                                                        ihaveRightFork = 0;
+
                                                         ACLMessage msgForkCancel = new ACLMessage(ACLMessage.CANCEL);
                                                         if(ihaveLeftFork == 1)
                                                             msgForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
                                                         else if(ihaveRightFork == 1)
                                                             msgForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
                                                         myAgent.send(msgForkCancel);
+                                                        ihaveLeftFork = 0;
+                                                        ihaveRightFork = 0;
                                                     }
 
                                                     myAgent.removeBehaviour(this);
                                                 }
                                                 else
-                                                {   System.out.println("Brak");
+                                                {
                                                     block();
                                                 }
                                             }
@@ -296,7 +293,7 @@ public class Philosopher extends Agent
                                 }
                             }
                             else
-                            {   System.out.println("Brak");
+                            {
                                 block();
                             }
                         }
@@ -305,13 +302,13 @@ public class Philosopher extends Agent
                 else if(state == 2) //STATE 2 - I have two | I'm getting kebab
                 {
 
-                    System.out.println(".....................State 2...............................");
+                    System.out.println(".....................State 2 TWO FORKS..............................." + myAgent.getName());
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-                        System.out.println("PHILOSPHER: I sent msg to Kebab");
+//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
                     //wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
@@ -319,7 +316,7 @@ public class Philosopher extends Agent
                         @Override
                         public void action()
                         {
-                            System.out.println("Cyclic**********");
+//                            System.out.println("Cyclic**********");
                             ACLMessage msg = myAgent.receive();
                             if (msg!= null)
                             {
@@ -333,7 +330,7 @@ public class Philosopher extends Agent
                                 }
                             }
                             else
-                            {   System.out.println("Brak");
+                            {
                                 block();
                             }
                         }
@@ -342,16 +339,18 @@ public class Philosopher extends Agent
                 else if(state == 3) //STATE 3 - RESET ALL
                 {
                     state = 0;
-                    System.out.println(".....................State 3...............................");
+                    System.out.println(".....................State 3 CANCELING FORKS..............................." + myAgent.getName());
                     //cancel left fork
                     ACLMessage msgLeftForkCancel = new ACLMessage(ACLMessage.CANCEL);
                     msgLeftForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
                     myAgent.send(msgLeftForkCancel);
+                    ihaveLeftFork = 0;
 
                     //cancel right fork
                     ACLMessage msgRightForkCancel = new ACLMessage(ACLMessage.CANCEL);
                     msgRightForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
                     myAgent.send(msgRightForkCancel);
+                    ihaveRightFork = 0;
                 }
 
 
