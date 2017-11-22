@@ -1,2 +1,0 @@
-# SystemyWieloagentoweLab3
-Kebabs

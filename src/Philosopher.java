@@ -1,12 +1,14 @@
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 
 import java.util.Vector;
@@ -17,14 +19,17 @@ public class Philosopher extends Agent
 {
     private int randInterval = 0;
     private Vector<AID> vectorIdOfKebabs = new Vector<>();
-    private Vector<AID> vectorIdOfForks = new Vector<>();
     private String leftFork;
     private String rightFork;
+    private Vector<AID> vectorIdOfLeftForks = new Vector<>();
+    private Vector<AID> vectorIdOfRightForks = new Vector<>();
     private int leftForkBusy;
     private int rightForkBusy;
     private int kony = 0;
     private int numberOfKebabs = 0;
     private int num = 0;
+    private int answerFromKebab = 0;
+    private int allowToGetFork = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,71 +91,96 @@ public class Philosopher extends Agent
         System.out.println("My name is: " + getLocalName() + " left " + leftFork + " right " + rightFork);
 
         while (vectorIdOfKebabs.isEmpty()) { searchServerOfKebab(); }
-        while (vectorIdOfForks.isEmpty()) { searchServerOfForks(); }
+        while (vectorIdOfLeftForks.isEmpty()) { searchAgentLeftFork(); }
+        while (vectorIdOfRightForks.isEmpty()) { searchAgentRightFork(); }
 
-//        ACLMessage reply = new ACLMessage(ACLMessage);
-//        reply.addReceiver(client);
-//        reply.setContent(msgStringBuilder.append(columnsStringBuilder).toString());
-//        myAgent.send(reply);
-        //ADD cyclic behaviour
-        PhilosopherCyclicBehaviour philosopherCyclicBehaviour = new PhilosopherCyclicBehaviour();
-        philosopherCyclicBehaviour.setKebabServer(vectorIdOfKebabs.firstElement());
-        addBehaviour(philosopherCyclicBehaviour);
+        System.out.print("))))))))))))MY LEFT" + vectorIdOfLeftForks.firstElement() + "))))))))))))))MY RIGHT" + vectorIdOfRightForks.firstElement());
 
-
-
-
-        Behaviour creatingTokenBehaviour = new TickerBehaviour( this, 2000)
+        Behaviour creatingTokenBehaviour = new TickerBehaviour( this, 5000)
         {
             protected void onTick()
             {
-                ACLMessage recieve = myAgent.receive();
-//                System.out.println(">>POPEK1");
-                //chec wziecia widelca
-                //Ping agentKebab
-                if(!vectorIdOfKebabs.isEmpty())
+                System.out.println("onTick_________________");
+                if(allowToGetFork == 0) //I can
                 {
-                    if(kony == 0)
+                    allowToGetFork = 1;
+                    if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-                        kony = 1;
-//                        System.out.println(">>FIRST BLOCKl");
-                        block();
+                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
-                        //...
-//                        System.out.println(">>POPEK2");
-                        if(recieve != null)
+                    //wait for answer from Kebab
+                    addBehaviour(new CyclicBehaviour()
+                    {
+                        @Override
+                        public void action()
                         {
-//                            System.out.println(">>POPEK3");
-                            if(recieve.getSender().toString().equals(vectorIdOfKebabs.firstElement().toString()))
+                            System.out.println("Cyclic**********");
+                            ACLMessage msg = myAgent.receive();
+                            if (msg!= null)
                             {
-                                numberOfKebabs = Integer.parseInt(recieve.getContent());
-                                System.out.println("PHILOSOPHER: REQ Number of kebabs " + numberOfKebabs);
-                                if(numberOfKebabs > 0)
+                                if(msg.getPerformative() == ACLMessage.REQUEST)
                                 {
-                                    System.out.println("KEBAB > 0");
-                                    ACLMessage msg = new ACLMessage(ACLMessage.AGREE);
-                                    msg.addReceiver(vectorIdOfForks.firstElement());
-                                    myAgent.send(msg);
-                                    block();
+                                    numberOfKebabs = Integer.parseInt(msg.getContent());
+                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
+
+                                    if(numberOfKebabs > 0)
+                                    {
+                                        //send msg to fork
+                                        //which one?
+                                        int whichFork = ThreadLocalRandom.current().nextInt(1, 2 + 1);
+                                        ACLMessage msgFork = new ACLMessage(ACLMessage.AGREE);
+                                        System.out.println("whichFork" + whichFork);
+                                        if (whichFork == 1)
+                                            msgFork.addReceiver(vectorIdOfLeftForks.firstElement());
+                                        else
+                                            msgFork.addReceiver(vectorIdOfRightForks.firstElement());
+//
+                                        myAgent.send(msgFork);
+//                                        System.out.println("PHILOSPHER: I sent msg to Fork");
+                                        //wait for answer from Fork
+                                        addBehaviour(new CyclicBehaviour() {
+                                            @Override
+                                            public void action()
+                                            {
+                                                ACLMessage msgFromFork = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.AGREE));
+                                                if (msgFromFork!= null)
+                                                {
+                                                    int contentFork = Integer.parseInt(msgFromFork.getContent());
+                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
+                                                    if(contentFork == 0)
+                                                        System.out.println("MOGE");
+                                                    else
+                                                        System.out.println("NIE MOGE");
+                                                    myAgent.removeBehaviour(this);
+                                                }
+                                                else
+                                                {   System.out.println("Brak");
+                                                    block();
+                                                }
+                                            }
+                                        });
+
+
+                                    }
+                                    myAgent.removeBehaviour(this);
+
                                 }
                             }
-                            else if(recieve != null && recieve.getSender().toString().equals(vectorIdOfForks.firstElement().toString()))
-                            {
-                                leftForkBusy = Integer.parseInt(recieve.getContent());
-                                System.out.println("PHILOSOPHER: AGREE leftForkBusy " + leftForkBusy);
+                            else
+                            {   System.out.println("Brak");
+                                block();
                             }
                         }
-
+                    });
+                }
+                else
+                {
 
                 }
-                num++;
-                if(num>6) {
-                    while (true);
-                }
-                System.out.println(">>POPEK4");
+
             }
         };
         addBehaviour(creatingTokenBehaviour);
@@ -181,18 +211,39 @@ public class Philosopher extends Agent
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void searchServerOfForks()
+    private void searchAgentLeftFork()
     {
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType("agentFork");
-        sd.setName("Fork");
+        sd.setName(leftFork);
         template.addServices(sd);
         try
         {
             DFAgentDescription[] result = DFService.search(this, template);
             for(int i = 0; i < result.length; ++i)
-                vectorIdOfForks.addElement(result[i].getName());
+                vectorIdOfLeftForks.addElement(result[i].getName());
+        }
+        catch (FIPAException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void searchAgentRightFork()
+    {
+        DFAgentDescription template = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("agentFork");
+        sd.setName(rightFork);
+        template.addServices(sd);
+        try
+        {
+            DFAgentDescription[] result = DFService.search(this, template);
+            for(int i = 0; i < result.length; ++i)
+                vectorIdOfRightForks.addElement(result[i].getName());
         }
         catch (FIPAException ex)
         {

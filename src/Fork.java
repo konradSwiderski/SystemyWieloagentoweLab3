@@ -24,7 +24,7 @@ public class Fork extends Agent
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType("agentFork");
-        sd.setName("Fork");
+        sd.setName(getLocalName());
         dfd.addServices(sd);
         try
         {
@@ -38,6 +38,6 @@ public class Fork extends Agent
         ForkCyclicBehaviour forkCyclicBehaviour = new ForkCyclicBehaviour();
         addBehaviour(forkCyclicBehaviour);
 
-        System.out.println("FORK has been started");
+        System.out.println("FORK has been started " + getLocalName());
     }
 }

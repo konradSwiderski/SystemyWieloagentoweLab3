@@ -4,7 +4,7 @@ import jade.lang.acl.MessageTemplate;
 
 public class ForkCyclicBehaviour extends CyclicBehaviour
 {
-    private int busy = 1;
+    private int busy = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -15,11 +15,12 @@ public class ForkCyclicBehaviour extends CyclicBehaviour
         {
             if(msg.getPerformative() == ACLMessage.AGREE)
             {
-                System.out.println("FORK: AGREE");
+                System.out.println("FORK: AGREE " + myAgent.getName());
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.AGREE);
                 reply.setContent(Integer.toString(busy));
                 myAgent.send(reply);
+                busy = 1;
             }
         }
         else

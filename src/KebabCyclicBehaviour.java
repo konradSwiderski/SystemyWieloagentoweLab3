@@ -21,11 +21,12 @@ public class KebabCyclicBehaviour extends CyclicBehaviour
         {
             if(msg.getPerformative() == ACLMessage.REQUEST)
             {
-                System.out.println("KEBAB: REQ");
+                System.out.println("KEBAB: I GOT");
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.REQUEST);
                 reply.setContent(Integer.toString(numberOfKebabs));
                 myAgent.send(reply);
+                System.out.println("KEBAB: I sent");
             }
         }
         else
