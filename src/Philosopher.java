@@ -23,13 +23,13 @@ public class Philosopher extends Agent
     private String rightFork;
     private Vector<AID> vectorIdOfLeftForks = new Vector<>();
     private Vector<AID> vectorIdOfRightForks = new Vector<>();
-    private int leftForkBusy;
-    private int rightForkBusy;
+    private int ihaveLeftFork = 0;
+    private int ihaveRightFork = 0;
     private int kony = 0;
     private int numberOfKebabs = 0;
     private int num = 0;
     private int answerFromKebab = 0;
-    private int allowToGetFork = 0;
+    private int state = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,9 +101,10 @@ public class Philosopher extends Agent
             protected void onTick()
             {
                 System.out.println("onTick_________________");
-                if(allowToGetFork == 0) //I can
+                if(state == 0) //STATE 0 - I don't have any...
                 {
-                    allowToGetFork = 1;
+                    state = 1;
+                    System.out.println(".....................State 0...............................");
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -150,10 +151,27 @@ public class Philosopher extends Agent
                                                 {
                                                     int contentFork = Integer.parseInt(msgFromFork.getContent());
                                                     System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
-                                                    if(contentFork == 0)
-                                                        System.out.println("MOGE");
+                                                    if(whichFork == 1)
+                                                    {
+                                                        if(contentFork == 0)
+                                                            ihaveLeftFork = 1;
+                                                        else
+                                                            ihaveLeftFork = 0;
+                                                    }
                                                     else
-                                                        System.out.println("NIE MOGE");
+                                                    {
+                                                        if(contentFork == 0)
+                                                            ihaveRightFork = 1;
+                                                        else
+                                                            ihaveRightFork = 0;
+                                                    }
+
+                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork);
+                                                    System.out.println("ihaveRightFork " + ihaveRightFork);
+                                                    //I dont have any....
+                                                    if(ihaveLeftFork == 0 && ihaveRightFork == 0)
+                                                        state = 0;
+
                                                     myAgent.removeBehaviour(this);
                                                 }
                                                 else
@@ -176,10 +194,119 @@ public class Philosopher extends Agent
                         }
                     });
                 }
-                else
+                else if(state == 1) //STATE 1 - I have one
                 {
+                    state = 2;
+                    System.out.println(".....................State 1...............................");
+                    if(!vectorIdOfKebabs.isEmpty())
+                    {
+                        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                        msg.addReceiver(vectorIdOfKebabs.firstElement());
+                        myAgent.send(msg);
+                        System.out.println("PHILOSPHER: I sent msg to Kebab");
+                    }
+                    //wait for answer from Kebab
+                    addBehaviour(new CyclicBehaviour()
+                    {
+                        @Override
+                        public void action()
+                        {
+                            System.out.println("Cyclic**********");
+                            ACLMessage msg = myAgent.receive();
+                            if (msg!= null)
+                            {
+                                if(msg.getPerformative() == ACLMessage.REQUEST)
+                                {
+                                    numberOfKebabs = Integer.parseInt(msg.getContent());
+                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
 
+                                    if(numberOfKebabs > 0)
+                                    {
+                                        //send msg to fork
+                                        //which one?
+                                        ACLMessage msgFork = new ACLMessage(ACLMessage.AGREE);
+                                        if(ihaveLeftFork == 1)
+                                            msgFork.addReceiver(vectorIdOfRightForks.firstElement());
+                                        else if(ihaveRightFork == 1)
+                                            msgFork.addReceiver(vectorIdOfLeftForks.firstElement());
+
+                                        myAgent.send(msgFork);
+
+                                        addBehaviour(new CyclicBehaviour() {
+                                            @Override
+                                            public void action()
+                                            {
+                                                ACLMessage msgFromFork = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.AGREE));
+                                                if (msgFromFork!= null)
+                                                {
+                                                    int contentFork = Integer.parseInt(msgFromFork.getContent());
+                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
+                                                    if(ihaveLeftFork == 1)
+                                                    {
+                                                        if(contentFork == 0)
+                                                            ihaveRightFork = 1;
+                                                        else
+                                                            ihaveRightFork = 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        if(contentFork == 0)
+                                                            ihaveLeftFork = 1;
+                                                        else
+                                                            ihaveLeftFork = 0;
+                                                    }
+
+                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork);
+                                                    System.out.println("ihaveRightFork " + ihaveRightFork);
+                                                    //I have two??
+                                                    if(ihaveLeftFork == 1 && ihaveRightFork == 1)
+                                                        state = 2;
+                                                    else
+                                                    {
+                                                        state = 0;
+                                                        ihaveLeftFork = 0;
+                                                        ihaveRightFork = 0;
+                                                        ACLMessage msgForkCancel = new ACLMessage(ACLMessage.CANCEL);
+                                                        if(ihaveLeftFork == 1)
+                                                            msgForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
+                                                        else if(ihaveRightFork == 1)
+                                                            msgForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
+                                                        myAgent.send(msgForkCancel);
+                                                    }
+
+                                                    myAgent.removeBehaviour(this);
+                                                }
+                                                else
+                                                {   System.out.println("Brak");
+                                                    block();
+                                                }
+                                            }
+                                        });
+
+
+                                    }
+                                    myAgent.removeBehaviour(this);
+
+                                }
+                            }
+                            else
+                            {   System.out.println("Brak");
+                                block();
+                            }
+                        }
+                    });
                 }
+                else if(state == 2) //STATE 2 - I have two | I'm getting kebab
+                {
+                    state = 3;
+                    System.out.println(".....................State 2...............................");
+                }
+                else if(state == 3) //STATE 3 - RESET ALL
+                {
+                    state = 0;
+                    System.out.println(".....................State 3...............................");
+                }
+
 
             }
         };

@@ -22,6 +22,11 @@ public class ForkCyclicBehaviour extends CyclicBehaviour
                 myAgent.send(reply);
                 busy = 1;
             }
+            if(msg.getPerformative() == ACLMessage.CANCEL)
+            {
+                System.out.println("FORK: CANCEL " + myAgent.getName());
+                busy = 0;
+            }
         }
         else
         {
