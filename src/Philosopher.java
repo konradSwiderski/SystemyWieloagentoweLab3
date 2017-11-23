@@ -19,18 +19,16 @@ public class Philosopher extends Agent
 {
     private int randInterval = 0;
     private Vector<AID> vectorIdOfKebabs = new Vector<>();
-    private String leftFork;
-    private String rightFork;
     private Vector<AID> vectorIdOfLeftForks = new Vector<>();
     private Vector<AID> vectorIdOfRightForks = new Vector<>();
-    private int ihaveLeftFork = 0;
-    private int ihaveRightFork = 0;
-    private int kony = 0;
-    private int numberOfKebabs = 0;
-    private int num = 0;
-    private int answerFromKebab = 0;
+    private String leftFork = "";
+    private String rightFork = "";
+    private int iHaveLeftFork = 0;
+    private int iHaveRightFork = 0;
+    private int numberOfKebabsTable = 0;
+    private int countOfMyKebabs = 0;
     private int state = 0;
-    private int countOfKebabs = 0;
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,50 +66,57 @@ public class Philosopher extends Agent
             leftFork = "Fork1";
             rightFork = "Fork5";
         }
-        if(getLocalName().toString().equals("Philosopher2"))
+        else if(getLocalName().toString().equals("Philosopher2"))
         {
             leftFork = "Fork2";
             rightFork = "Fork1";
         }
-        if(getLocalName().toString().equals("Philosopher3"))
+        else if(getLocalName().toString().equals("Philosopher3"))
         {
             leftFork = "Fork3";
             rightFork = "Fork2";
         }
-        if(getLocalName().toString().equals("Philosopher4"))
+        else if(getLocalName().toString().equals("Philosopher4"))
         {
             leftFork = "Fork4";
             rightFork = "Fork3";
         }
-        if(getLocalName().toString().equals("Philosopher5"))
+        else if(getLocalName().toString().equals("Philosopher5"))
         {
             leftFork = "Fork5";
             rightFork = "Fork4";
         }
+
         System.out.println("My name is: " + getLocalName() + " left " + leftFork + " right " + rightFork);
 
+        //Search for agent Kebab and forks
         while (vectorIdOfKebabs.isEmpty()) { searchServerOfKebab(); }
         while (vectorIdOfLeftForks.isEmpty()) { searchAgentLeftFork(); }
         while (vectorIdOfRightForks.isEmpty()) { searchAgentRightFork(); }
 
 
+        //Main Behaviour
         Behaviour creatingTokenBehaviour = new TickerBehaviour( this, 5000)
         {
             protected void onTick()
             {
-                System.out.println("______________onTick_________________"+ countOfKebabs + " " + myAgent.getName());
-                if(state == 0) //STATE 0 - I don't have any...
+                System.out.println("______Current number of Kebabs______"+ countOfMyKebabs + " " + myAgent.getName());
+
+                //STATE 0 - I DON'T HAVE ANY FORKS...
+                if(state == 0)
                 {
                     state = 1;
-                    System.out.println(".....................State 0 NO FORKS..............................." + myAgent.getName());
+                    System.out.println("....State_0 #NO FORKS...." + myAgent.getName());
+
+                    //Send msg to kebab #Do you have any kebabs on the table?
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
-                    //wait for answer from Kebab
+
+                    //Wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
                     {
                         @Override
@@ -122,16 +127,17 @@ public class Philosopher extends Agent
                             {
                                 if(msg.getPerformative() == ACLMessage.REQUEST)
                                 {
-                                    numberOfKebabs = Integer.parseInt(msg.getContent());
-//                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
+                                    numberOfKebabsTable = Integer.parseInt(msg.getContent());
 
-                                    if(numberOfKebabs > 0)
+                                    //Kebabs are on the table
+                                    if(numberOfKebabsTable > 0)
                                     {
-                                        //send msg to fork
-                                        //which one?
-                                        int whichFork = ThreadLocalRandom.current().nextInt(1, 2 + 1);
+                                        //Send msg to Fork
                                         ACLMessage msgFork = new ACLMessage(ACLMessage.AGREE);
-//                                        System.out.println("whichFork" + whichFork);
+
+                                        //Choose random fork
+                                        int whichFork = ThreadLocalRandom.current().nextInt(1, 2 + 1);
+
                                         if (whichFork == 1)
                                             msgFork.addReceiver(vectorIdOfLeftForks.firstElement());
                                         else
@@ -139,7 +145,7 @@ public class Philosopher extends Agent
 
                                         myAgent.send(msgFork);
 
-                                        //wait for answer from Fork
+                                        //Wait for answer from Fork
                                         addBehaviour(new CyclicBehaviour() {
                                             @Override
                                             public void action()
@@ -147,27 +153,30 @@ public class Philosopher extends Agent
                                                 ACLMessage msgFromFork = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.AGREE));
                                                 if (msgFromFork!= null)
                                                 {
+                                                    //Content #Busy or not
                                                     int contentFork = Integer.parseInt(msgFromFork.getContent());
-//                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
+
                                                     if(whichFork == 1)
                                                     {
+                                                        //Not busy
                                                         if(contentFork == 0)
-                                                            ihaveLeftFork = 1;
+                                                            iHaveLeftFork = 1; //Take fork
                                                         else
-                                                            ihaveLeftFork = 0;
+                                                            iHaveLeftFork = 0;
                                                     }
                                                     else
                                                     {
                                                         if(contentFork == 0)
-                                                            ihaveRightFork = 1;
+                                                            iHaveRightFork = 1;
                                                         else
-                                                            ihaveRightFork = 0;
+                                                            iHaveRightFork = 0;
                                                     }
 
-                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork + " " + myAgent.getName());
-                                                    System.out.println("ihaveRightFork " + ihaveRightFork + " " + myAgent.getName());
-                                                    //I dont have any....
-                                                    if(ihaveLeftFork == 0 && ihaveRightFork == 0)
+                                                    System.out.println("iHaveLeftFork " + iHaveLeftFork + " " + myAgent.getName());
+                                                    System.out.println("iHaveRightFork " + iHaveRightFork + " " + myAgent.getName());
+
+                                                    //I don't have any....
+                                                    if(iHaveLeftFork == 0 && iHaveRightFork == 0)
                                                         state = 0;
 
                                                     myAgent.removeBehaviour(this);
@@ -178,12 +187,11 @@ public class Philosopher extends Agent
                                                 }
                                             }
                                         });
-
-
                                     }
                                     else
                                     {
-                                        System.out.println("============================My name: " + getLocalName() + " Time: " + randInterval + " I got kebabs: " + countOfKebabs);
+                                        //End of Philosopher
+                                        System.out.println(">>>>>> My name: " + getLocalName() + " Time: " + randInterval + " I got kebabs: " + countOfMyKebabs);
                                         myAgent.doDelete();
                                     }
                                     myAgent.removeBehaviour(this);
@@ -197,18 +205,21 @@ public class Philosopher extends Agent
                         }
                     });
                 }
-                else if(state == 1) //STATE 1 - I have one
+                //STATE 1 - I HAVE ONE FORK
+                else if(state == 1)
                 {
                     state = 2;
-                    System.out.println(".....................State 1 ONE FORK..............................." + myAgent.getName());
+                    System.out.println("....State 1 ONE FORK...." + myAgent.getName());
+
+                    //Send msg to kebab #Do you have any kebabs on the table?
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
-                    //wait for answer from Kebab
+
+                    //Wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
                     {
                         @Override
@@ -219,21 +230,23 @@ public class Philosopher extends Agent
                             {
                                 if(msg.getPerformative() == ACLMessage.REQUEST)
                                 {
-                                    numberOfKebabs = Integer.parseInt(msg.getContent());
-//                                    System.out.println("PHILOSOPHER: Number of kebabs " + numberOfKebabs);
+                                    numberOfKebabsTable = Integer.parseInt(msg.getContent());
 
-                                    if(numberOfKebabs > 0)
+                                    //Kebabs are on the table
+                                    if(numberOfKebabsTable > 0)
                                     {
-                                        //send msg to fork
-                                        //which one?
+                                        //Send msg to Fork
                                         ACLMessage msgFork = new ACLMessage(ACLMessage.AGREE);
-                                        if(ihaveLeftFork == 1)
+
+                                        //Choose second fork
+                                        if(iHaveLeftFork == 1)
                                             msgFork.addReceiver(vectorIdOfRightForks.firstElement());
-                                        else if(ihaveRightFork == 1)
+                                        else if(iHaveRightFork == 1)
                                             msgFork.addReceiver(vectorIdOfLeftForks.firstElement());
 
                                         myAgent.send(msgFork);
 
+                                        //Wait for answer from Fork
                                         addBehaviour(new CyclicBehaviour() {
                                             @Override
                                             public void action()
@@ -241,40 +254,43 @@ public class Philosopher extends Agent
                                                 ACLMessage msgFromFork = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.AGREE));
                                                 if (msgFromFork!= null)
                                                 {
+                                                    //Content #Busy or not
                                                     int contentFork = Integer.parseInt(msgFromFork.getContent());
-//                                                    System.out.println("Witaj Forku!!!!!!!!!!!!!! " + contentFork);
-                                                    if(ihaveLeftFork == 1)
+
+                                                    if(iHaveLeftFork == 1)
                                                     {
                                                         if(contentFork == 0)
-                                                            ihaveRightFork = 1;
+                                                            iHaveRightFork = 1; //Take fork
                                                         else
-                                                            ihaveRightFork = 0;
+                                                            iHaveRightFork = 0;
                                                     }
                                                     else
                                                     {
                                                         if(contentFork == 0)
-                                                            ihaveLeftFork = 1;
+                                                            iHaveLeftFork = 1;
                                                         else
-                                                            ihaveLeftFork = 0;
+                                                            iHaveLeftFork = 0;
                                                     }
 
-                                                    System.out.println("ihaveLeftFork " + ihaveLeftFork + " " + myAgent.getName());
-                                                    System.out.println("ihaveRightFork " + ihaveRightFork + " " + myAgent.getName());
-                                                    //I have two??
-                                                    if(ihaveLeftFork == 1 && ihaveRightFork == 1)
+                                                    System.out.println("iHaveLeftFork " + iHaveLeftFork + " " + myAgent.getName());
+                                                    System.out.println("iHaveRightFork " + iHaveRightFork + " " + myAgent.getName());
+
+                                                    //I have two forks?
+                                                    if(iHaveLeftFork == 1 && iHaveRightFork == 1)
                                                         state = 2;
                                                     else
                                                     {
+                                                        //Reset and put down forks
                                                         state = 0;
 
                                                         ACLMessage msgForkCancel = new ACLMessage(ACLMessage.CANCEL);
-                                                        if(ihaveLeftFork == 1)
+                                                        if(iHaveLeftFork == 1)
                                                             msgForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
-                                                        else if(ihaveRightFork == 1)
+                                                        else if(iHaveRightFork == 1)
                                                             msgForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
                                                         myAgent.send(msgForkCancel);
-                                                        ihaveLeftFork = 0;
-                                                        ihaveRightFork = 0;
+                                                        iHaveLeftFork = 0;
+                                                        iHaveRightFork = 0;
                                                     }
 
                                                     myAgent.removeBehaviour(this);
@@ -285,11 +301,8 @@ public class Philosopher extends Agent
                                                 }
                                             }
                                         });
-
-
                                     }
                                     myAgent.removeBehaviour(this);
-
                                 }
                             }
                             else
@@ -299,32 +312,37 @@ public class Philosopher extends Agent
                         }
                     });
                 }
-                else if(state == 2) //STATE 2 - I have two | I'm getting kebab
+                //STATE 2 - I HAVE TWO FORKS | I'M GETTING KEBAB
+                else if(state == 2)
                 {
 
-                    System.out.println(".....................State 2 TWO FORKS..............................." + myAgent.getName());
+                    System.out.println("....State 2 TWO FORKS...." + myAgent.getName());
+
+                    //Send msg to kebab #Give me kebab
                     if(!vectorIdOfKebabs.isEmpty())
                     {
                         ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
                         msg.addReceiver(vectorIdOfKebabs.firstElement());
                         myAgent.send(msg);
-//                        System.out.println("PHILOSPHER: I sent msg to Kebab");
                     }
-                    //wait for answer from Kebab
+
+                    //Wait for answer from Kebab
                     addBehaviour(new CyclicBehaviour()
                     {
                         @Override
                         public void action()
                         {
-//                            System.out.println("Cyclic**********");
                             ACLMessage msg = myAgent.receive();
                             if (msg!= null)
                             {
                                 if(msg.getPerformative() == ACLMessage.PROPOSE)
                                 {
+                                    //Content #True or false
                                     int kebab = Integer.parseInt(msg.getContent());
+
+                                    //Increment my kebabs
                                     if(kebab == 1)
-                                        countOfKebabs = countOfKebabs + 1;
+                                        countOfMyKebabs = countOfMyKebabs + 1;
                                     state = 3;
                                     myAgent.removeBehaviour(this);
                                 }
@@ -336,29 +354,29 @@ public class Philosopher extends Agent
                         }
                     });
                 }
-                else if(state == 3) //STATE 3 - RESET ALL
+                //STATE 3 - RESET ALL
+                else if(state == 3)
                 {
                     state = 0;
-                    System.out.println(".....................State 3 CANCELING FORKS..............................." + myAgent.getName());
-                    //cancel left fork
+                    System.out.println("....tate 3 CANCELING FORKS...." + myAgent.getName());
+
+                    //Cancel left fork
                     ACLMessage msgLeftForkCancel = new ACLMessage(ACLMessage.CANCEL);
                     msgLeftForkCancel.addReceiver(vectorIdOfLeftForks.firstElement());
                     myAgent.send(msgLeftForkCancel);
-                    ihaveLeftFork = 0;
+                    iHaveLeftFork = 0;
 
-                    //cancel right fork
+                    //Cancel right fork
                     ACLMessage msgRightForkCancel = new ACLMessage(ACLMessage.CANCEL);
                     msgRightForkCancel.addReceiver(vectorIdOfRightForks.firstElement());
                     myAgent.send(msgRightForkCancel);
-                    ihaveRightFork = 0;
+                    iHaveRightFork = 0;
                 }
-
-
             }
         };
         addBehaviour(creatingTokenBehaviour);
 
-        System.out.println("Philosopher has been started");
+        System.out.println("Philosopher has been started " + getLocalName());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////

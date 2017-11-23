@@ -7,14 +7,7 @@ import jade.domain.FIPAException;
 
 public class Kebab extends Agent
 {
-    private int numberOfKebabs;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public Kebab()
-    {
-        numberOfKebabs = 5;
-    }
+    private int numberOfKebabs = 15;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +31,7 @@ public class Kebab extends Agent
         {
             ex.printStackTrace();
         }
+
         //ADD CyclicBehaviour
         KebabCyclicBehaviour kebabCyclicBehaviour = new KebabCyclicBehaviour();
         kebabCyclicBehaviour.setNumberOfKebabs(numberOfKebabs);

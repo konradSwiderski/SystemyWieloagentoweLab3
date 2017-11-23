@@ -1,19 +1,11 @@
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import java.util.concurrent.ThreadLocalRandom;
-
 
 public class Fork extends Agent
 {
-    private boolean busy = false;
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
     protected void setup()
     {
