@@ -15,7 +15,6 @@ public class ForkCyclicBehaviour extends CyclicBehaviour
         {
             if(msg.getPerformative() == ACLMessage.AGREE)
             {
-                System.out.println("FORK: AGREE " + busy + " " + myAgent.getName());
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.AGREE);
                 reply.setContent(Integer.toString(busy));
@@ -24,7 +23,6 @@ public class ForkCyclicBehaviour extends CyclicBehaviour
             }
             if(msg.getPerformative() == ACLMessage.CANCEL)
             {
-                System.out.println("FORK: CANCEL " + myAgent.getName());
                 busy = 0;
             }
         }

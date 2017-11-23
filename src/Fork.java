@@ -27,6 +27,7 @@ public class Fork extends Agent
             ex.printStackTrace();
         }
 
+        //ADD CyclicBehaviour
         ForkCyclicBehaviour forkCyclicBehaviour = new ForkCyclicBehaviour();
         addBehaviour(forkCyclicBehaviour);
     }

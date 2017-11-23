@@ -21,7 +21,6 @@ public class KebabCyclicBehaviour extends CyclicBehaviour
         {
             if(msg.getPerformative() == ACLMessage.REQUEST)
             {
-                System.out.println("KEBAB: REQUEST");
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.REQUEST);
                 reply.setContent(Integer.toString(numberOfKebabs));
@@ -29,7 +28,6 @@ public class KebabCyclicBehaviour extends CyclicBehaviour
             }
             if(msg.getPerformative() == ACLMessage.PROPOSE)
             {
-                System.out.println("KEBAB: PROPOSE");
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.PROPOSE);
                 if(numberOfKebabs > 0)
