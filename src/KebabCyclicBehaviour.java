@@ -4,7 +4,7 @@ import jade.lang.acl.MessageTemplate;
 
 public class KebabCyclicBehaviour extends CyclicBehaviour
 {
-    private int numberOfKebabs;
+    private int numberOfKebabs = 0;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

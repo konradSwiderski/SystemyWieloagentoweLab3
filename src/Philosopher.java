@@ -267,6 +267,7 @@ public class Philosopher extends Agent
                                     }
                                     else
                                     {
+                                        //No more kebabs...
                                         //Put down fork
                                         ACLMessage msgForkCancel = new ACLMessage(ACLMessage.CANCEL);
                                         if(iHaveLeftFork == 1)
