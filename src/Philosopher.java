@@ -70,12 +70,12 @@ public class Philosopher extends Agent
         {
             protected void onTick()
             {
-                System.out.println("______Current number of Kebabs: "+ countOfMyKebabs + " " + myAgent.getName());
+                System.out.println("Current number of Kebabs: "+ countOfMyKebabs + " " + myAgent.getName());
 
                 //STATE 0 - I DON'T HAVE ANY FORKS...
                 if(state == 0)
                 {
-                    System.out.println("....State_0_#NO_FORKS_I'M_GETTING_FIRST_FORK...." + myAgent.getName());
+                    System.out.println("    State_0_#NO_FORKS_I'M_GETTING_FIRST_FORK...." + myAgent.getName());
 
                     //Ping kebab
                     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -138,7 +138,7 @@ public class Philosopher extends Agent
                                                             iHaveRightFork = 0;
                                                     }
 
-                                                    System.out.println("LeftFork: " + iHaveLeftFork + " RightFork: "
+                                                    System.out.println("        LeftFork: " + iHaveLeftFork + " RightFork: "
                                                             + iHaveRightFork + " " + myAgent.getName());
 
                                                     //I don't have any....
@@ -164,7 +164,6 @@ public class Philosopher extends Agent
                                         myAgent.doDelete();
                                     }
                                     myAgent.removeBehaviour(this);
-
                                 }
                             }
                             else
@@ -177,7 +176,7 @@ public class Philosopher extends Agent
                 //STATE 1 - I HAVE ONE FORK
                 else if(state == 1)
                 {
-                    System.out.println("....State_1_#ONE_FORK_I'M_GETTING_SECOND_FORK...." + myAgent.getName());
+                    System.out.println("    State_1_#ONE_FORK_I'M_GETTING_SECOND_FORK..." + myAgent.getName());
 
                     //Ping kebab
                     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -237,7 +236,7 @@ public class Philosopher extends Agent
                                                             iHaveLeftFork = 0;
                                                     }
 
-                                                    System.out.println("LeftFork: " + iHaveLeftFork + " RightFork: "
+                                                    System.out.println("        LeftFork: " + iHaveLeftFork + " RightFork: "
                                                             + iHaveRightFork + " " + myAgent.getName());
 
                                                     //I have two forks?
@@ -292,7 +291,7 @@ public class Philosopher extends Agent
                 else if(state == 2)
                 {
 
-                    System.out.println("....State_2_#TWO_FORKS_I'M_GETTING_KEBAB...." + myAgent.getName());
+                    System.out.println("    State_2_#TWO_FORKS_I'M_GETTING_KEBAB..." + myAgent.getName());
 
                     //Get Kebab
                     ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
@@ -330,7 +329,7 @@ public class Philosopher extends Agent
                 //STATE 3 - RESET ALL
                 else if(state == 3)
                 {
-                    System.out.println("....State_3_CANCELING_FORKS...." + myAgent.getName());
+                    System.out.println("    State_3_CANCELING_FORKS..." + myAgent.getName());
 
                     //Cancel left fork
                     ACLMessage msgLeftForkCancel = new ACLMessage(ACLMessage.CANCEL);
